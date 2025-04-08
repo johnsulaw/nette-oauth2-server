@@ -13,7 +13,7 @@
   "require": {
     "php": "^7.1",
     "kdyby/events": "~4.0.0",
-    "latte/latte": "2.5.*",
+    "latte/latte": "2.6.*",
     "league/oauth2-server": "^7.0",
     "nette/application": "~3.0.0",
     "nette/security": "~3.0.0",
