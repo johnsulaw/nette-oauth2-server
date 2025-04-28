@@ -57,9 +57,7 @@ class LoginSubscriber implements \Doctrine\Common\EventSubscriber
 	{
 		return [
 			Application::class . '::onPresenter',
-			User::class . '::onLoggedIn' => [
-				['onLoggedIn', $this->priority],
-			],
+			User::class . '::onLoggedIn' => $this->priority,
 		];
 	}
 
