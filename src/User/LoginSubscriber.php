@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Lookyman\NetteOAuth2Server\User;
 
-use Kdyby\Events\Subscriber;
 use Lookyman\NetteOAuth2Server\RedirectConfig;
 use Lookyman\NetteOAuth2Server\UI\OAuth2Presenter;
 use Nette\Application\Application;
@@ -12,7 +11,7 @@ use Nette\Application\UI\Presenter;
 use Nette\InvalidStateException;
 use Nette\Security\User;
 
-class LoginSubscriber implements Subscriber
+class LoginSubscriber implements \Doctrine\Common\EventSubscriber
 {
 
 	/**
