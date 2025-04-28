@@ -20,7 +20,7 @@
     "nextras/secured-links": "^1.3",
     "psr/log": "^1.0",
     "zendframework/zend-diactoros": "^1.3",
-    "doctrine/dbal": "^0.7.0"
+    "nettrine/dbal": "^0.7.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0",
