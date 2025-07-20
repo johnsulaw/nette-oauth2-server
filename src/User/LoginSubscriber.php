@@ -11,7 +11,7 @@ use Nette\Application\UI\Presenter;
 use Nette\InvalidStateException;
 use Nette\Security\User;
 
-class LoginSubscriber implements \Doctrine\Common\EventSubscriber
+class LoginSubscriber implements \Contributte\EventDispatcher\EventSubscriber
 {
 
 	/**
@@ -35,12 +35,12 @@ class LoginSubscriber implements \Doctrine\Common\EventSubscriber
 		$this->priority = $priority;
 	}
 
-	public function onPresenter(Application $application, IPresenter $presenter): void
+	public function onPresenter(\Contributte\Events\Extra\Event\Application\PresenterEvent $presenterEvent): void
 	{
-		$this->presenter = $presenter;
+		$this->presenter = $presenterEvent->getPresenter();
 	}
 
-	public function onLoggedIn(User $user): void
+	public function onLoggedIn(\Contributte\Events\Extra\Event\Security\LoggedInEvent $loggedInEvent): void
 	{
 		if ($this->presenter === null) {
 			throw new InvalidStateException('Presenter not set');
@@ -53,11 +53,11 @@ class LoginSubscriber implements \Doctrine\Common\EventSubscriber
 	/**
 	 * @return array
 	 */
-	public function getSubscribedEvents(): array
+	public static function getSubscribedEvents(): array
 	{
 		return [
-			Application::class . '::onPresenter',
-			User::class . '::onLoggedIn' => $this->priority,
+			\Contributte\Events\Extra\Event\Application\PresenterEvent::class => 'onPresenter',
+			\Contributte\Events\Extra\Event\Security\LoggedInEvent::class => ['onLoggedIn', 10],
 		];
 	}
 

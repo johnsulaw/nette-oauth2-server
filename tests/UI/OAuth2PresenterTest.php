@@ -21,6 +21,8 @@ use Nette\Security\User;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+\DG\BypassFinals::enable();
+
 class OAuth2PresenterTest extends TestCase
 {
 
@@ -135,7 +137,12 @@ class OAuth2PresenterTest extends TestCase
 		$httpResponse = $this->getMockBuilder(HttpResponse::class)->disableOriginalConstructor()->getMock();
 
 		$session = $this->getMockBuilder(Session::class)->disableOriginalConstructor()->getMock();
-		$session->expects(self::once())->method('getSection')->with(OAuth2Presenter::SESSION_NAMESPACE)->willReturn(new \stdClass());
+		$section = $this->createMock(\Nette\Http\SessionSection::class);
+		
+		$session->expects(self::once())
+			->method('getSection')
+			->with(OAuth2Presenter::SESSION_NAMESPACE)
+			->willReturn($section);
 
 		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
 		$user->expects(self::once())->method('isLoggedIn')->willReturn(false);
@@ -167,7 +174,12 @@ class OAuth2PresenterTest extends TestCase
 		$httpResponse = $this->getMockBuilder(HttpResponse::class)->disableOriginalConstructor()->getMock();
 
 		$session = $this->getMockBuilder(Session::class)->disableOriginalConstructor()->getMock();
-		$session->expects(self::once())->method('getSection')->with(OAuth2Presenter::SESSION_NAMESPACE)->willReturn(new \stdClass());
+		$section = $this->createMock(\Nette\Http\SessionSection::class);
+		
+		$session->expects(self::once())
+			->method('getSection')
+			->with(OAuth2Presenter::SESSION_NAMESPACE)
+			->willReturn($section);
 
 		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
 		$user->expects(self::once())->method('isLoggedIn')->willReturn(true);

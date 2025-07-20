@@ -11,6 +11,8 @@ use Nette\Application\UI\Presenter;
 use Nette\Security\User;
 use PHPUnit\Framework\TestCase;
 
+\DG\BypassFinals::enable();
+
 class LoginSubscriberTest extends TestCase
 {
 
@@ -21,11 +23,9 @@ class LoginSubscriberTest extends TestCase
 			10
 		);
 		self::assertEquals([
-			Application::class . '::onPresenter',
-			User::class . '::onLoggedIn' => [
-				['onLoggedIn', 10],
-			],
-		], $subscriber->getSubscribedEvents());
+			\Contributte\Events\Extra\Event\Application\PresenterEvent::class => 'onPresenter',
+			\Contributte\Events\Extra\Event\Security\LoggedInEvent::class => ['onLoggedIn', 10],
+		], LoginSubscriber::getSubscribedEvents());
 	}
 
 	public function testOnLoggedIn(): void
@@ -40,21 +40,21 @@ class LoginSubscriberTest extends TestCase
 		$user = $this->createMock(User::class);
 
 		$subscriber = new LoginSubscriber($redirectConfig);
-		$subscriber->onPresenter($this->createMock(Application::class), $presenter);
-		$subscriber->onLoggedIn($user);
+		$subscriber->onPresenter(
+			new \Contributte\Events\Extra\Event\Application\PresenterEvent($this->createMock(Application::class), $presenter)
+		);
+		$subscriber->onLoggedIn(new \Contributte\Events\Extra\Event\Security\LoggedInEvent($user));
 	}
-
-	/**
-	 * @expectedException \Nette\InvalidStateException
-	 */
+	
 	public function testOnLoggedInNoPresenter(): void
 	{
+		$this->expectException(\Nette\InvalidStateException::class);
 		$redirectConfig = $this->createMock(RedirectConfig::class);
 
 		$user = $this->createMock(User::class);
 
 		$subscriber = new LoginSubscriber($redirectConfig);
-		$subscriber->onLoggedIn($user);
+		$subscriber->onLoggedIn(new \Contributte\Events\Extra\Event\Security\LoggedInEvent($user));
 	}
 
 }
